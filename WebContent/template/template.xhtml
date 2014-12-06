@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	</f:facet>
+	<f:view contentType="text/html" />
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="pragma" content="no-cache" />
+	
+	<h:outputStylesheet name="layout.css" library="css" />
+	
+	<title>
+		<ui:insert name="titulo">PetShop Online</ui:insert>
+	</title>
+</h:head>
+<h:body>
+	<div id="cabecalho">
+		<ui:insert name="cabecalho">
+			<ui:include src="/template/cabecalho.xhtml" />
+		</ui:insert>
+	</div>
+	
+	<div id="conteudo">
+		<ui:insert name="conteudo" />
+		
+		<p:growl autoUpdate="true" showDetail="true" showSummary="true" life="9000" 
+			globalOnly="true" />
+	</div>
+	
+	<div id="rodape">
+		<ui:insert name="rodape">
+			<ui:include src="/template/rodape.xhtml" />
+		</ui:insert>
+	</div>
+</h:body>
+</html>

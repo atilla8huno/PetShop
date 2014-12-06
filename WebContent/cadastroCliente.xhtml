@@ -1,0 +1,46 @@
+<ui:composition template="/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="conteudo">
+		<p:panel>
+			<h:form acceptcharset="ISO-8859-1">
+				<p:panel header="Formulário" id="formulario">
+					<h:panelGrid columns="3">
+						<h:outputLabel value="Nome:" />
+						<p:inputText value="#{clienteCtrl.cliente.nome}" required="true"
+							requiredMessage="É obrigatório preencher o campo nome." 
+							id="nome"/>
+						<p:message for="nome" />
+						
+						<h:outputLabel value="CPF:" />
+						<p:inputMask value="#{clienteCtrl.cliente.cpf}" mask="999.999.999-99" 
+							required="true" requiredMessage="É obrigatório preencher o campo CPF."
+							id="cpf"/>
+						<p:message for="cpf" />
+						
+						<h:outputLabel value="Telefone:" />
+						<p:inputMask value="#{clienteCtrl.cliente.telefone}" mask="(99) 9999-9999"
+							id="telefone"/>
+						<p:message for="telefone" />
+						
+						<h:outputLabel value="Endereço:" />
+						<p:inputText value="#{clienteCtrl.cliente.endereco}" size="50" 
+							id="endereco"/>
+						<p:message for="endereco" />
+					</h:panelGrid>
+				</p:panel>
+				<p:panel header="Ações">
+					<p:commandButton value="Salvar" action="#{clienteCtrl.salvar}"
+						update="formulario"/>
+					
+					<p:commandButton value="Limpar" action="#{clienteCtrl.limpar}" 
+						update="formulario" process="@this" immediate="true"/>
+				</p:panel>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
