@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.persistence.EntityManager;
+import javax.faces.context.FacesContext;
 
 import br.com.devschool.cliente.servico.ClienteServico;
 import br.com.devschool.entidade.Cliente;
@@ -26,49 +26,41 @@ public class ClienteCtrl extends Controlador implements Serializable {
 	
 	private Servico<Cliente> servico;
 	private Cliente cliente;
-	private EntityManager em;
 	private List<Cliente> clientes;
 	
 	// Constrói o controlador e suas dependências...
 	public ClienteCtrl() {
 		em = JPAUtil.createEntityManager();
 		servico = new ClienteServico(em);
-		
-		limpar();
+		verificarEdicao();
 	}
 	
 	public void salvar() {
 		try {
-			begin(em);
+			begin();
 			cliente = servico.salvar(cliente);
-			commit(em);
+			commit();
 			
 			addMensagemInfo("Cliente salvo com sucesso!");
 		} catch (Exception e) {
-			rollback(em);
+			rollback();
 			
 			addMensagemError("Ocorreu um erro ao salvar o cliente! Erro: " + e.getMessage());
 		} finally {
-			close(em);
+			close();
 			limpar();
 		}
 	}
 	
-	public void atualizar() {
-		try {
-			begin(em);
-			cliente = servico.atualizar(cliente);
-			commit(em);
-			
-			addMensagemInfo("Cliente atualizado com sucesso!");
-		} catch (Exception e) {
-			rollback(em);
-			
-			addMensagemError("Ocorreu um erro ao atualizar o cliente! Erro: " + e.getMessage());
-		} finally {
-			close(em);
-			limpar();
+	private void verificarEdicao() {
+		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente") != null) {
+			cliente = (Cliente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente");
 		}
+	}
+
+	public String atualizar() {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cliente", cliente);
+		return "cadastroCliente.jsf?faces-redirect=true";
 	}
 	
 	public void consultar() {
@@ -81,18 +73,17 @@ public class ClienteCtrl extends Controlador implements Serializable {
 	
 	public void excluir() {
 		try {
-			begin(em);
+			begin();
 			servico.excluir(cliente.getId());
-			commit(em);
+			commit();
 			
-			addMensagemInfo("Cliente excluído com sucesso!");
+			posExclusao();
 		} catch (Exception e) {
-			rollback(em);
+			rollback();
 			
 			addMensagemError("Ocorreu um erro ao excluir o cliente! Erro: " + e.getMessage());
 		} finally {
-			close(em);
-			limpar();
+			close();
 		}
 	}
 	
@@ -101,9 +92,17 @@ public class ClienteCtrl extends Controlador implements Serializable {
 		clientes = new ArrayList<Cliente>();
 		nome = null;
 		cpf = null;
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("cliente");
 	}
 	
-	protected void begin(EntityManager em) {
+	private void posExclusao() {
+		clientes.remove(cliente);
+		cliente = new Cliente();
+		
+		addMensagemInfo("Cliente excluído com sucesso!");
+	}
+	
+	protected void begin() {
 		if (em == null || !em.isOpen()) {
 			em = JPAUtil.createEntityManager();
 			servico = new ClienteServico(em);

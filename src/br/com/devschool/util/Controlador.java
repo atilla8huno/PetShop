@@ -4,10 +4,14 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import br.com.devschool.util.jpa.JPAUtil;
 
 public abstract class Controlador {
+	
+	protected EntityManager em;
 	
 	private static Severity ERROR	= FacesMessage.SEVERITY_ERROR;
 	private static Severity INFO	= FacesMessage.SEVERITY_INFO;
@@ -15,11 +19,11 @@ public abstract class Controlador {
 
 	public abstract void salvar();
 	public abstract void limpar();
-	public abstract void atualizar();
+	public abstract String atualizar();
 	public abstract void excluir();
 	public abstract void consultar();
 
-	protected void begin(EntityManager em) {
+	protected void begin() {
 		if (em == null || !em.isOpen()) {
 			em = JPAUtil.createEntityManager();
 		}
@@ -27,17 +31,17 @@ public abstract class Controlador {
 		em.getTransaction().begin();
 	}
 	
-	protected void commit(EntityManager em) {
+	protected void commit() {
 		em.getTransaction().commit();
 	}
 	
-	protected void close(EntityManager em) {
+	protected void close() {
 		if (em.isOpen()) {
 			em.close();
 		}
 	}
 	
-	protected void rollback(EntityManager em) {
+	protected void rollback() {
 		if (em.getTransaction().isActive()) {
 			em.getTransaction().rollback();
 		}
@@ -51,6 +55,14 @@ public abstract class Controlador {
 		context.addMessage(null, new FacesMessage(severity, titulo, msg));
 	}
 
+	protected HttpSession getSession() {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();  
+		HttpSession httpSession = request.getSession(false);
+		
+		return httpSession;
+	}
+	
 	public static void addMensagemError(String msg) {
 		addMensagem(ERROR, "ERRO", msg);
 	}

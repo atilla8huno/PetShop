@@ -30,7 +30,7 @@
 				
 				<p:panel header="Resultados" id="resultados">
 					<p:dataTable var="item" value="#{clienteCtrl.clientes}" paginator="true"
-						rows="10" emptyMessage="Nenhum registro encontrado..." id="table">
+						rows="7" emptyMessage="Nenhum registro encontrado..." id="table">
 						
 						<p:column headerText="Nome">
 							<h:outputText value="#{item.nome}" />
@@ -47,7 +47,25 @@
 						<p:column headerText="Endereço">
 							<h:outputText value="#{item.endereco}" />
 						</p:column>
+						
+						<p:column>
+							<p:commandButton icon="ui-icon-pencil" label="Editar" title="Editar" 
+									action="#{clienteCtrl.atualizar}">
+								<f:setPropertyActionListener target="#{clienteCtrl.cliente}" value="#{item}" />
+							</p:commandButton>
+							<p:commandButton icon="ui-icon-trash" label="Excluir?" title="Excluir?" 
+									onclick="confirmarExclusao.show()">
+								<f:setPropertyActionListener target="#{clienteCtrl.cliente}" value="#{item}" />
+							</p:commandButton>
+						</p:column>
 					</p:dataTable>
+					
+					<p:confirmDialog showEffect="fade" widgetVar="confirmarExclusao" message="Deseja excluir o registro?" 
+							header="Confirmação">
+						<p:commandButton value="Sim" icon="ui-icon-check" action="#{clienteCtrl.excluir}" 
+								oncomplete="confirmarExclusao.hide()" update="resultados" />
+						<p:commandButton value="Não" icon="ui-icon-close" type="button" onclick="confirmarExclusao.hide()" />
+					</p:confirmDialog>
 				</p:panel>
 			</h:form>
 		</p:panel>

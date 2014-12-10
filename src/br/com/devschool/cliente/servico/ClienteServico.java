@@ -16,11 +16,16 @@ public class ClienteServico implements Servico<Cliente> {
 	}
 
 	public Cliente salvar(Cliente cliente) {
-		return cliente = dao.salvar(cliente);
+		if (cliente.getId() != null && cliente.getId() > 0) {
+			return atualizar(cliente);
+		}
+		cliente = dao.salvar(cliente);
+		return cliente;
 	}
 	
 	public Cliente atualizar(Cliente cliente) {
-		return dao.atualizar(cliente);
+		cliente = dao.atualizar(cliente); 
+		return cliente;
 	}
 	
 	public void excluir(Integer id) {
