@@ -4,8 +4,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import br.com.devschool.util.jpa.JPAUtil;
 
@@ -55,14 +53,6 @@ public abstract class Controlador {
 		context.addMessage(null, new FacesMessage(severity, titulo, msg));
 	}
 
-	protected HttpSession getSession() {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();  
-		HttpSession httpSession = request.getSession(false);
-		
-		return httpSession;
-	}
-	
 	public static void addMensagemError(String msg) {
 		addMensagem(ERROR, "ERRO", msg);
 	}

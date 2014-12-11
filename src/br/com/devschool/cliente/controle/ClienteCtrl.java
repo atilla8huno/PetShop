@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import br.com.devschool.cliente.servico.ClienteServico;
 import br.com.devschool.entidade.Cliente;
 import br.com.devschool.util.Controlador;
-import br.com.devschool.util.Servico;
 import br.com.devschool.util.jpa.JPAUtil;
 
 @ManagedBean
@@ -24,7 +23,7 @@ public class ClienteCtrl extends Controlador implements Serializable {
 	private String nome;
 	private String cpf;
 	
-	private Servico<Cliente> servico;
+	private ClienteServico servico;
 	private Cliente cliente;
 	private List<Cliente> clientes;
 	
@@ -33,6 +32,17 @@ public class ClienteCtrl extends Controlador implements Serializable {
 		em = JPAUtil.createEntityManager();
 		servico = new ClienteServico(em);
 		verificarEdicao();
+	}
+	
+	private void verificarEdicao() {
+		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente") != null) {
+			cliente = (Cliente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente");
+		}
+	}
+
+	public String atualizar() {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cliente", cliente);
+		return "cadastroCliente.jsf?faces-redirect=true";
 	}
 	
 	public void salvar() {
@@ -52,20 +62,9 @@ public class ClienteCtrl extends Controlador implements Serializable {
 		}
 	}
 	
-	private void verificarEdicao() {
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente") != null) {
-			cliente = (Cliente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente");
-		}
-	}
-
-	public String atualizar() {
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cliente", cliente);
-		return "cadastroCliente.jsf?faces-redirect=true";
-	}
-	
 	public void consultar() {
 		try {
-			clientes = new ArrayList<Cliente>(servico.consultar());
+			clientes = new ArrayList<Cliente>(servico.consultar(nome, cpf));
 		} catch (Exception e) {
 			addMensagemError("Erro ao tentar consultar registros! Erro: " + e.getMessage());
 		}

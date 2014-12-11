@@ -35,6 +35,17 @@ public class ClienteServico implements Servico<Cliente> {
 	public List<Cliente> consultar() {
 		return dao.consultar();
 	}
+	
+	public List<Cliente> consultar(String nome, String cpf) {
+		if (nome == null || nome.equals("")) {
+			nome = "%";
+		}
+		if (cpf == null) {
+			cpf = "";
+		}
+		
+		return dao.consultar(nome, cpf);
+	}
 
 	public Cliente consultarPor(Integer id) {
 		return dao.consultarPor(id);
