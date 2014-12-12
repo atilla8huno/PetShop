@@ -12,11 +12,10 @@
 					<h:panelGrid columns="2">
 					
 						<h:outputLabel value="Cliente:" />
-						<p:autoComplete id="cliente" required="true" converter="clienteConverter" 
+						<p:autoComplete id="cliente" queryDelay="500" converter="clienteConverter" 
 							maxResults="10" minQueryLength="3" forceSelection="true"
 							value="#{animalCtrl.cliente}" var="cliente" itemValue="#{cliente}"
-							itemLabel="#{cliente.nome}" completeMethod="#{animalCtrl.autoCompleteCliente}"
-							requiredMessage="É obrigatório preencher o campo Dono." queryDelay="500">
+							itemLabel="#{cliente.nome}" completeMethod="#{animalCtrl.autoCompleteCliente}">
 							
 							<f:facet name="itemtip">
 								<h:panelGrid columns="2">
