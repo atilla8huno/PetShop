@@ -1,5 +1,6 @@
 package br.com.devschool.animal.servico;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -42,5 +43,12 @@ public class AnimalServico implements Servico<Animal> {
 	public List<Cliente> consultarClientes(String search) {
 		search = search.concat("%");
 		return clienteServico.consultarPor(search);
+	}
+
+	public List<Animal> consultarPor(Cliente cliente) {
+		if (cliente == null || cliente.getId() == null) {
+			throw new IllegalArgumentException("É obrigatório selecionar um Cliente.");
+		}
+		return dao.consultarPor(cliente);
 	}
 }

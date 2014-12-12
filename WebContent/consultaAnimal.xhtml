@@ -11,58 +11,73 @@
 				<p:panel header="Filtros" id="filtros">
 					<h:panelGrid columns="2">
 					
-						<h:outputLabel value="Nome:" />
-						<p:inputText value="#{clienteCtrl.nome}" id="nome" />
-						
-						<h:outputLabel value="CPF:" />
-						<p:inputMask value="#{clienteCtrl.cpf}" mask="999.999.999-99" id="cpf"/>
-						
+						<h:outputLabel value="Cliente:" />
+						<p:autoComplete id="cliente" required="true" converter="clienteConverter" 
+							maxResults="10" minQueryLength="3" forceSelection="true"
+							value="#{animalCtrl.cliente}" var="cliente" itemValue="#{cliente}"
+							itemLabel="#{cliente.nome}" completeMethod="#{animalCtrl.autoCompleteCliente}"
+							requiredMessage="É obrigatório preencher o campo Dono." queryDelay="500">
+							
+							<f:facet name="itemtip">
+								<h:panelGrid columns="2">
+									<f:facet name="header">
+										<h:outputText value="Detalhes" />
+									</f:facet>
+
+									<h:outputText value="Cliente:" />
+									<h:outputText value="#{cliente.nome}" />
+									
+									<h:outputText value="CPF:" />
+									<h:outputText value="#{cliente.cpf}" />
+								</h:panelGrid>
+							</f:facet>
+						</p:autoComplete>
 					</h:panelGrid>
 				</p:panel>
 				
 				<p:panel header="Ações">
-					<p:commandButton value="Consultar" action="#{clienteCtrl.consultar}"
+					<p:commandButton value="Consultar" action="#{animalCtrl.consultar}"
 						icon="ui-icon-search" update="resultados"/>
 					
-					<p:commandButton value="Limpar" action="#{clienteCtrl.limpar}" 
+					<p:commandButton value="Limpar" action="#{animalCtrl.limpar}" 
 						update="@all" process="@this" immediate="true"/>
 				</p:panel>
 				
 				<p:panel header="Resultados" id="resultados">
-					<p:dataTable var="item" value="#{clienteCtrl.clientes}" paginator="true"
+					<p:dataTable var="item" value="#{animalCtrl.animals}" paginator="true"
 						rows="5" emptyMessage="Nenhum registro encontrado..." id="table">
 						
 						<p:column headerText="Nome">
 							<h:outputText value="#{item.nome}" />
 						</p:column>
 						
-						<p:column headerText="CPF">
-							<h:outputText value="#{item.cpf}" />
+						<p:column headerText="Dono">
+							<h:outputText value="#{item.dono.nome}" />
 						</p:column>
 						
-						<p:column headerText="Telefone">
-							<h:outputText value="#{item.telefone}" />
+						<p:column headerText="Raça">
+							<h:outputText value="#{item.raca}" />
 						</p:column>
 						
-						<p:column headerText="Endereço">
-							<h:outputText value="#{item.endereco}" />
+						<p:column headerText="Espécie">
+							<h:outputText value="#{item.especie}" />
 						</p:column>
 						
 						<p:column>
 							<p:commandButton icon="ui-icon-pencil" label="Editar" title="Editar" 
-									action="#{clienteCtrl.atualizar}">
-								<f:setPropertyActionListener target="#{clienteCtrl.cliente}" value="#{item}" />
+									action="#{animalCtrl.atualizar}">
+								<f:setPropertyActionListener target="#{animalCtrl.animal}" value="#{item}" />
 							</p:commandButton>
 							<p:commandButton icon="ui-icon-trash" label="Excluir?" title="Excluir?" 
 									onclick="confirmarExclusao.show()">
-								<f:setPropertyActionListener target="#{clienteCtrl.cliente}" value="#{item}" />
+								<f:setPropertyActionListener target="#{animalCtrl.animal}" value="#{item}" />
 							</p:commandButton>
 						</p:column>
 					</p:dataTable>
 					
 					<p:confirmDialog showEffect="fade" widgetVar="confirmarExclusao" message="Deseja excluir o registro?" 
 							header="Confirmação">
-						<p:commandButton value="Sim" icon="ui-icon-check" action="#{clienteCtrl.excluir}" 
+						<p:commandButton value="Sim" icon="ui-icon-check" action="#{animalCtrl.excluir}" 
 								oncomplete="confirmarExclusao.hide()" update="resultados" />
 						<p:commandButton value="Não" icon="ui-icon-close" type="button" onclick="confirmarExclusao.hide()" />
 					</p:confirmDialog>

@@ -70,7 +70,7 @@ public class AnimalCtrl extends Controlador {
 	
 	public void consultar() {
 		try {
-			animals = new ArrayList<Animal>(servico.consultar());
+			animals = new ArrayList<Animal>(servico.consultarPor(cliente));
 		} catch (Exception e) {
 			addMensagemError("Erro ao tentar consultar registros! Erro: " + e.getMessage());
 		}
