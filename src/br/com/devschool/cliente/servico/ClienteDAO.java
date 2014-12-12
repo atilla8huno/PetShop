@@ -37,7 +37,7 @@ public class ClienteDAO {
 		return typedQuery.getResultList();
 	}
 	
-	protected List<Cliente> consultar(String nome, String cpf) {
+	protected List<Cliente> consultarPor(String nome, String cpf) {
 		String query = "SELECT c FROM Cliente c WHERE c.nome LIKE :nome";
 		if (!cpf.equals("")) {
 			query = query + " AND c.cpf = :cpf";
@@ -50,6 +50,15 @@ public class ClienteDAO {
 			typedQuery.setParameter("cpf", cpf);
 		}
 		
+		return typedQuery.getResultList();
+	}
+	
+	protected List<Cliente> consultarPor(String nome) {
+		String query = "SELECT c FROM Cliente c WHERE c.nome LIKE :nome";
+		
+		TypedQuery<Cliente> typedQuery = em.createQuery(query, Cliente.class);
+		typedQuery.setParameter("nome", nome);
+
 		return typedQuery.getResultList();
 	}
 

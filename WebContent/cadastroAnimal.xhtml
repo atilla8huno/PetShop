@@ -1,0 +1,61 @@
+<ui:composition template="/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="conteudo">
+		<p:panel>
+			<h:form acceptcharset="ISO-8859-1">
+				<p:panel header="Formulário" id="formulario">
+					<h:panelGrid columns="3">
+						<h:outputLabel value="Dono:" />
+						<p:autoComplete id="dono" required="true" converter="clienteConverter" 
+							maxResults="10" minQueryLength="3" forceSelection="true"
+							value="#{animalCtrl.animal.dono}" var="cliente" itemValue="#{cliente}"
+							itemLabel="#{cliente.nome}" completeMethod="#{animalCtrl.autoCompleteCliente}"
+							requiredMessage="É obrigatório preencher o campo Dono." queryDelay="500">
+							
+							<f:facet name="itemtip">
+								<h:panelGrid columns="2">
+									<f:facet name="header">
+										<h:outputText value="Detalhes" />
+									</f:facet>
+
+									<h:outputText value="Cliente:" />
+									<h:outputText value="#{cliente.nome}" />
+									
+									<h:outputText value="CPF:" />
+									<h:outputText value="#{cliente.cpf}" />
+								</h:panelGrid>
+							</f:facet>
+						</p:autoComplete>
+						<p:message for="dono" />
+					
+						<h:outputLabel value="Nome:" />
+						<p:inputText value="#{animalCtrl.animal.nome}" required="true"
+							requiredMessage="É obrigatório preencher o campo Nome." 
+							id="nome"/>
+						<p:message for="nome" />
+						
+						<h:outputLabel value="Espécie:" />
+						<p:inputText value="#{animalCtrl.animal.especie}" id="especie"/>
+						<p:message for="especie" />
+						
+						<h:outputLabel value="Raça:" />
+						<p:inputText value="#{animalCtrl.animal.raca}" id="raca"/>
+						<p:message for="raca" />
+					</h:panelGrid>
+				</p:panel>
+				<p:panel header="Ações">
+					<p:commandButton value="Salvar" action="#{animalCtrl.salvar}"
+						update="formulario"/>
+					
+					<p:commandButton value="Limpar" action="#{animalCtrl.limpar}" 
+						update="formulario" process="@this" immediate="true"/>
+				</p:panel>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>

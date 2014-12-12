@@ -4,78 +4,142 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import br.com.devschool.animal.servico.AnimalServico;
 import br.com.devschool.entidade.Animal;
-import br.com.devschool.util.Servico;
+import br.com.devschool.entidade.Cliente;
+import br.com.devschool.util.Controlador;
+import br.com.devschool.util.jpa.JPAUtil;
 
 @ManagedBean
-@RequestScoped
-public class AnimalCtrl {
+@ViewScoped
+public class AnimalCtrl extends Controlador {
 
-	private Servico<Animal> servico;
-	private Animal animal;
-	private EntityManager em;
-	private List<Animal> animais;
+	// filtros da pesquisa
+	private Cliente cliente;
 	
+	private AnimalServico servico;
+	private Animal animal;
+	private List<Animal> animals;
+	
+	// Constrói o controlador e suas dependências...
 	public AnimalCtrl() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("PetShopPU");
-		em = factory.createEntityManager();
+		em = JPAUtil.createEntityManager();
 		servico = new AnimalServico(em);
+		verificarEdicao();
+	}
+	
+	private void verificarEdicao() {
+		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("animal") != null) {
+			animal = (Animal) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("animal");
+		}
+	}
+
+	public String atualizar() {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("animal", animal);
+		return "cadastroAnimal.jsf?faces-redirect=true";
 	}
 	
 	public void salvar() {
 		try {
-			em.getTransaction().begin();
+			begin();
 			animal = servico.salvar(animal);
-			em.getTransaction().commit();
+			commit();
+			
+			addMensagemInfo("Animal salvo com sucesso!");
 		} catch (Exception e) {
-			em.getTransaction().rollback();
+			rollback();
+			
+			addMensagemError("Ocorreu um erro ao salvar o animal! Erro: " + e.getMessage());
+		} finally {
+			close();
+			limpar();
+		}
+	}
+	
+	public List<Cliente> autoCompleteCliente(String search) {
+		try {
+			return servico.consultarClientes(search);
+		} catch (Exception e) {
+			addMensagemError("Erro ao tentar consultar cliente! Erro: " + e.getMessage());
+		}
+		return null;
+	}
+	
+	public void consultar() {
+		try {
+			animals = new ArrayList<Animal>(servico.consultar());
+		} catch (Exception e) {
+			addMensagemError("Erro ao tentar consultar registros! Erro: " + e.getMessage());
 		}
 	}
 	
 	public void excluir() {
 		try {
-			em.getTransaction().begin();
+			begin();
 			servico.excluir(animal.getId());
-			em.getTransaction().commit();
+			commit();
+			
+			posExclusao();
 		} catch (Exception e) {
-			em.getTransaction().rollback();
+			rollback();
+			
+			addMensagemError("Ocorreu um erro ao excluir o animal! Erro: " + e.getMessage());
+		} finally {
+			close();
 		}
 	}
 	
-	public List<Animal> consultar() {
-		try {
-			animais = servico.consultar();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return animais;
+	public void limpar() {
+		animal = new Animal();
+		cliente = new Cliente();
+		animals = new ArrayList<Animal>();
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("animal");
 	}
-
+	
+	private void posExclusao() {
+		animals.remove(animal);
+		animal = new Animal();
+		
+		addMensagemInfo("Animal excluído com sucesso!");
+	}
+	
+	public void setServico() {
+		servico = new AnimalServico(em);
+	}
+	
 	public Animal getAnimal() {
 		if (animal == null) {
 			animal = new Animal();
 		}
 		return animal;
 	}
+	
+	public Cliente getCliente() {
+		if (cliente == null) {
+			cliente = new Cliente();
+		}
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 	public void setAnimal(Animal animal) {
 		this.animal = animal;
 	}
 
-	public List<Animal> getAnimais() {
-		if (animais == null) {
-			animais = new ArrayList<Animal>();
+	public List<Animal> getAnimals() {
+		if (animals == null) {
+			animals = new ArrayList<Animal>();
 		}
-		return animais;
+		return animals;
 	}
 
-	public void setAnimais(List<Animal> animais) {
-		this.animais = animais;
+	public void setAnimals(List<Animal> animals) {
+		this.animals = animals;
 	}
 }

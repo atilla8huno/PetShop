@@ -4,15 +4,19 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import br.com.devschool.cliente.servico.ClienteServico;
 import br.com.devschool.entidade.Animal;
+import br.com.devschool.entidade.Cliente;
 import br.com.devschool.util.Servico;
 
 public class AnimalServico implements Servico<Animal> {
 	
 	private AnimalDAO dao;
+	private ClienteServico clienteServico;
 	
 	public AnimalServico(EntityManager em) {
 		dao = new AnimalDAO(em);
+		clienteServico = new ClienteServico(em);
 	}
 
 	public Animal salvar(Animal animal) {
@@ -33,5 +37,10 @@ public class AnimalServico implements Servico<Animal> {
 
 	public Animal consultarPor(Integer id) {
 		return dao.consultarPor(id);
+	}
+
+	public List<Cliente> consultarClientes(String search) {
+		search = search.concat("%");
+		return clienteServico.consultarPor(search);
 	}
 }

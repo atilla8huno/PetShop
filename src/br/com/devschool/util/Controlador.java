@@ -20,10 +20,12 @@ public abstract class Controlador {
 	public abstract String atualizar();
 	public abstract void excluir();
 	public abstract void consultar();
+	public abstract void setServico();
 
 	protected void begin() {
 		if (em == null || !em.isOpen()) {
 			em = JPAUtil.createEntityManager();
+			setServico();
 		}
 		
 		em.getTransaction().begin();

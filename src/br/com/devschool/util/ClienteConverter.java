@@ -9,7 +9,7 @@ import br.com.devschool.cliente.servico.ClienteServico;
 import br.com.devschool.entidade.Cliente;
 import br.com.devschool.util.jpa.JPAUtil;
 
-@FacesConverter(forClass = Cliente.class)
+@FacesConverter(forClass = Cliente.class, value = "clienteConverter")
 public class ClienteConverter implements Converter {
 
 	@Override
@@ -26,7 +26,7 @@ public class ClienteConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
-			return ((Cliente) value).getId().toString();
+			return ((Cliente) value).getId() != null ? ((Cliente) value).getId().toString() : null;
 		}
 		return null;
 	}

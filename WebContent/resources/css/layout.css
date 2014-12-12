@@ -3,3 +3,34 @@
 .ui-widget {
 	font-size: 12px !important;
 }
+
+#cabecalho, #conteudo, #rodape {
+	padding: 8px;
+}
+
+#cabecalho {
+	height: 43px;
+	background-color: #e2e2e2;
+	box-shadow: 0px 2px 2px #ccc;
+}
+
+#cabecalho h1 {
+	padding: 0px;
+	margin: 0px;
+}
+
+.logo {
+	float: left;
+}
+
+.menu {
+	margin-top: 15px;
+	float: right;
+}
+
+#rodape {
+	font-size: 10px;
+	font-color: #9b9b9b;
+	margin-top: 10px;
+	border-top: 1px solid #cfcfcf;
+}

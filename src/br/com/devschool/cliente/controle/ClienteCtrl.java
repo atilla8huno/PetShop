@@ -1,6 +1,5 @@
 package br.com.devschool.cliente.controle;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +14,8 @@ import br.com.devschool.util.jpa.JPAUtil;
 
 @ManagedBean
 @ViewScoped
-public class ClienteCtrl extends Controlador implements Serializable {
+public class ClienteCtrl extends Controlador {
 
-	private static final long serialVersionUID = 1L;
-	
 	// filtros da pesquisa
 	private String nome;
 	private String cpf;
@@ -64,7 +61,7 @@ public class ClienteCtrl extends Controlador implements Serializable {
 	
 	public void consultar() {
 		try {
-			clientes = new ArrayList<Cliente>(servico.consultar(nome, cpf));
+			clientes = new ArrayList<Cliente>(servico.consultarPor(nome, cpf));
 		} catch (Exception e) {
 			addMensagemError("Erro ao tentar consultar registros! Erro: " + e.getMessage());
 		}
@@ -86,6 +83,10 @@ public class ClienteCtrl extends Controlador implements Serializable {
 		}
 	}
 	
+	public void setServico() {
+		servico = new ClienteServico(em);
+	}
+	
 	public void limpar() {
 		cliente = new Cliente();
 		clientes = new ArrayList<Cliente>();
@@ -99,15 +100,6 @@ public class ClienteCtrl extends Controlador implements Serializable {
 		cliente = new Cliente();
 		
 		addMensagemInfo("Cliente excluído com sucesso!");
-	}
-	
-	protected void begin() {
-		if (em == null || !em.isOpen()) {
-			em = JPAUtil.createEntityManager();
-			servico = new ClienteServico(em);
-		}
-		
-		em.getTransaction().begin();
 	}
 	
 	public Cliente getCliente() {

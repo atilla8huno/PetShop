@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Atendimento implements Serializable {
@@ -18,6 +19,7 @@ public class Atendimento implements Serializable {
 	private Date dataHoraSaida;
 	private String diagnostico;
 	private Double valor;
+	@OneToOne
 	private Animal animal;
 	
 	public Atendimento() {

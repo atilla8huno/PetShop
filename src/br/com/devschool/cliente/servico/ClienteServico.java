@@ -36,7 +36,7 @@ public class ClienteServico implements Servico<Cliente> {
 		return dao.consultar();
 	}
 	
-	public List<Cliente> consultar(String nome, String cpf) {
+	public List<Cliente> consultarPor(String nome, String cpf) {
 		if (nome == null || nome.equals("")) {
 			nome = "%";
 		}
@@ -44,7 +44,11 @@ public class ClienteServico implements Servico<Cliente> {
 			cpf = "";
 		}
 		
-		return dao.consultar(nome, cpf);
+		return dao.consultarPor(nome, cpf);
+	}
+	
+	public List<Cliente> consultarPor(String nome) {
+		return dao.consultarPor(nome);
 	}
 
 	public Cliente consultarPor(Integer id) {
