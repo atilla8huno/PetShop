@@ -10,7 +10,8 @@
 		<class>br.com.devschool.entidade.Cliente</class>
 		<class>br.com.devschool.entidade.Atendimento</class>
 		<class>br.com.devschool.entidade.Animal</class>
-
+		<class>br.com.devschool.entidade.SolicitacaoEntrega</class>
+		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.url"	value="jdbc:postgresql://localhost:5432/cursojsf" />

@@ -61,6 +61,7 @@ public class ClienteCtrl extends Controlador {
 	
 	public void consultar() {
 		try {
+			setServico();
 			clientes = new ArrayList<Cliente>(servico.consultarPor(nome, cpf));
 		} catch (Exception e) {
 			addMensagemError("Erro ao tentar consultar registros! Erro: " + e.getMessage());
@@ -84,6 +85,9 @@ public class ClienteCtrl extends Controlador {
 	}
 	
 	public void setServico() {
+		if (em == null || !em.isOpen()) {
+			em = JPAUtil.createEntityManager();
+		}
 		servico = new ClienteServico(em);
 	}
 	

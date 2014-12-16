@@ -1,5 +1,6 @@
 package br.com.devschool.util;
 
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -10,6 +11,7 @@ import br.com.devschool.entidade.Cliente;
 import br.com.devschool.util.jpa.JPAUtil;
 
 @FacesConverter(forClass = Cliente.class, value = "clienteConverter")
+@SessionScoped
 public class ClienteConverter implements Converter {
 
 	@Override

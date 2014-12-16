@@ -31,14 +31,14 @@ public class ClienteDAO {
 	}
 	
 	protected List<Cliente> consultar() {
-		String query = "SELECT c FROM Cliente c";
+		String query = "SELECT DISTINCT c FROM Cliente c";
 		TypedQuery<Cliente> typedQuery = em.createQuery(query, Cliente.class);
 		
 		return typedQuery.getResultList();
 	}
 	
 	protected List<Cliente> consultarPor(String nome, String cpf) {
-		String query = "SELECT c FROM Cliente c WHERE c.nome LIKE :nome";
+		String query = "SELECT DISTINCT c FROM Cliente c WHERE c.nome LIKE :nome";
 		if (!cpf.equals("")) {
 			query = query + " AND c.cpf = :cpf";
 		}
@@ -54,7 +54,7 @@ public class ClienteDAO {
 	}
 	
 	protected List<Cliente> consultarPor(String nome) {
-		String query = "SELECT c FROM Cliente c WHERE c.nome LIKE :nome";
+		String query = "SELECT DISTINCT c FROM Cliente c WHERE c.nome LIKE :nome";
 		
 		TypedQuery<Cliente> typedQuery = em.createQuery(query, Cliente.class);
 		typedQuery.setParameter("nome", nome);

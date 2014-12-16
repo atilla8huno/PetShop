@@ -1,0 +1,81 @@
+<ui:composition template="/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="conteudo">
+		<p:panel>
+			<h:form acceptcharset="ISO-8859-1">
+				<p:panel header="Formulário" id="formulario">
+					<h:panelGrid columns="3">
+						<h:outputLabel value="Cliente:" />
+						<p:autoComplete id="cliente" required="true" converter="clienteConverter" 
+							maxResults="10" minQueryLength="3" forceSelection="true"
+							value="#{atendimentoCtrl.cliente}" var="cliente" itemValue="#{cliente}"
+							itemLabel="#{cliente.nome}" completeMethod="#{atendimentoCtrl.autoCompleteCliente}"
+							requiredMessage="É obrigatório selecionar um Cliente." queryDelay="500">
+							
+							<f:facet name="itemtip">
+								<h:panelGrid columns="2" width="200">
+									<f:facet name="header">
+										<h:outputText value="Detalhes" />
+									</f:facet>
+
+									<h:outputText value="Cliente:" />
+									<h:outputText value="#{cliente.nome}" />
+									
+									<h:outputText value="CPF:" />
+									<h:outputText value="#{cliente.cpf}" />
+								</h:panelGrid>
+							</f:facet>
+							
+							<p:ajax event="itemSelect" update="animal" listener="#{atendimentoCtrl.consultarAnimais}" />
+						</p:autoComplete>
+						<p:message for="cliente" />
+						
+						<h:outputLabel value="Nome:" />
+						<p:selectOneMenu id="animal" required="true" requiredMessage="É obrigatório selecionar um Animal." 
+								value="#{atendimentoCtrl.atendimento.animal}" style="width:180px" converter="animalConverter">
+							<f:selectItems value="#{atendimentoCtrl.animals}" var="animal" itemLabel="#{animal.nome}" 
+									itemValue="#{animal}" />
+						</p:selectOneMenu>
+						<p:message for="animal" />
+						
+						<h:outputLabel value="Data/Hora Entrada:" />
+						<p:calendar value="#{atendimentoCtrl.atendimento.dataHoraEntrada}" id="dataEntrada" 
+								navigator="true" pattern="dd/MM/yyyy HH:mm:ss" required="true" 
+								requiredMessage="É obrigatório selecionar a Data de Entrada."/>
+						<p:message for="dataEntrada" />
+						
+						<h:outputLabel value="Data/Hora Saída:" />
+						<p:calendar value="#{atendimentoCtrl.atendimento.dataHoraSaida}" id="dataSaida" 
+								navigator="true" pattern="dd/MM/yyyy HH:mm:ss" required="true" 
+								requiredMessage="É obrigatório selecionar a Data de Saída."
+								disabled="#{atendimentoCtrl.atendimento.id eq null}"/>
+						<p:message for="dataSaida" />
+						
+						<h:outputLabel value="Diagnóstico:" />
+						<p:inputTextarea value="#{atendimentoCtrl.atendimento.diagnostico}" required="true" style="width:300px"
+							requiredMessage="É obrigatório preencher o campo Diagnóstico." id="diagnostico"/>
+						<p:message for="diagnostico" />
+						
+						<h:outputLabel value="Valor:" />
+						<p:inputText value="#{atendimentoCtrl.atendimento.valor}" id="valor">
+							<f:convertNumber currencySymbol="R$" maxFractionDigits="2" />
+						</p:inputText>
+						<p:message for="valor" />
+					</h:panelGrid>
+				</p:panel>
+				<p:panel header="Ações">
+					<p:commandButton value="Salvar" action="#{atendimentoCtrl.salvar}"
+						update="formulario"/>
+					
+					<p:commandButton value="Limpar" action="#{atendimentoCtrl.limpar}" 
+						update="formulario" process="@this" immediate="true"/>
+				</p:panel>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>

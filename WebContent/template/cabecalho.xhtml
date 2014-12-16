@@ -3,22 +3,35 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	
-	<div class="menu">
+	<div>
 		<h:form acceptcharset="ISO-8859-1">
 			<p:menubar>
 				<p:submenu label="Navegação">
-					<p:menuitem action="cadastroCliente.jsf?faces-redirect=true" value="Cadastro de Clientes" />
-					<p:menuitem action="consultaCliente.jsf?faces-redirect=true" value="Consulta de Clientes" />
+					<p:menuitem action="cadastroCliente.jsf?faces-redirect=true" 
+							value="Cadastro de Clientes" />
+					<p:menuitem action="consultaCliente.jsf?faces-redirect=true" 
+							value="Consulta de Clientes" />
 					
 					<p:separator />
 					
-					<p:menuitem action="cadastroAnimal.jsf?faces-redirect=true" value="Cadastro de Animais" />
-					<p:menuitem action="consultaAnimal.jsf?faces-redirect=true" value="Consulta de Animais" />
+					<p:menuitem action="cadastroAnimal.jsf?faces-redirect=true" 
+							value="Cadastro de Animais" />
+					<p:menuitem action="consultaAnimal.jsf?faces-redirect=true" 
+							value="Consulta de Animais" />
 					
 					<p:separator />
 					
-					<p:menuitem action="cadastroAtendimento.jsf?faces-redirect=true" value="Cadastro de Atendimentos" />
-					<p:menuitem action="consultaAtendimento.jsf?faces-redirect=true" value="Consulta de Atendimentos" />
+					<p:menuitem action="cadastroAtendimento.jsf?faces-redirect=true" 
+							value="Cadastro de Atendimentos" />
+					<p:menuitem action="consultaAtendimento.jsf?faces-redirect=true" 
+							value="Consulta de Atendimentos" />
+							
+					<p:separator />
+					
+					<p:menuitem action="cadastroSolicitacaoEntrega.jsf?faces-redirect=true" 
+							value="Cadastro de Solicitações de Entrega" />
+					<p:menuitem action="consultaSolicitacaoEntrega.jsf?faces-redirect=true" 
+							value="Consulta de Solicitações de Entrega" />
 				</p:submenu>
 			</p:menubar>
 		</h:form>

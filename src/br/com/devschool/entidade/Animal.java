@@ -12,14 +12,15 @@ public class Animal implements Serializable {
 
 	private static final long serialVersionUID = -6473856833622854456L;
 
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private Integer id;
 	private String nome;
 	private String especie;
 	private String raca;
 	@ManyToOne
 	private Cliente dono;
-	
+
 	public Animal() {
 		dono = new Cliente();
 	}

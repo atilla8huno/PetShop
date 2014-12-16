@@ -1,6 +1,5 @@
 package br.com.devschool.animal.servico;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -21,11 +20,16 @@ public class AnimalServico implements Servico<Animal> {
 	}
 
 	public Animal salvar(Animal animal) {
-		return dao.salvar(animal);
+		if (animal.getId() != null && animal.getId() > 0) {
+			return atualizar(animal);
+		}
+		animal = dao.salvar(animal);
+		return animal;
 	}
 	
 	public Animal atualizar(Animal animal) {
-		return dao.atualizar(animal);
+		animal = dao.atualizar(animal); 
+		return animal;
 	}
 	
 	public void excluir(Integer id) {
@@ -40,9 +44,9 @@ public class AnimalServico implements Servico<Animal> {
 		return dao.consultarPor(id);
 	}
 
-	public List<Cliente> consultarClientes(String search) {
-		search = search.concat("%");
-		return clienteServico.consultarPor(search);
+	public List<Cliente> consultarClientes(String nome) {
+		nome = nome.concat("%");
+		return clienteServico.consultarPor(nome);
 	}
 
 	public List<Animal> consultarPor(Cliente cliente) {

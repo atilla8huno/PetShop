@@ -32,14 +32,14 @@ public class AnimalDAO {
 	}
 	
 	protected List<Animal> consultar() {
-		String query = "SELECT a FROM Animal a";
+		String query = "SELECT DISTINCT a FROM Animal a";
 		TypedQuery<Animal> typedQuery = em.createQuery(query, Animal.class);
 		
 		return typedQuery.getResultList();
 	}
 	
 	protected List<Animal> consultarPor(Cliente dono) {
-		String query = "SELECT a FROM Animal a WHERE a.dono.id = :dono";
+		String query = "SELECT DISTINCT a FROM Animal a WHERE a.dono.id = :dono";
 		
 		TypedQuery<Animal> typedQuery = em.createQuery(query, Animal.class);
 		typedQuery.setParameter("dono", dono.getId());

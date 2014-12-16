@@ -1,0 +1,89 @@
+<ui:composition template="/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="conteudo">
+		<p:panel>
+			<h:form acceptcharset="ISO-8859-1">
+				<p:panel header="Filtros" id="filtros">
+					<h:panelGrid columns="2">
+					
+						<h:outputLabel value="Cliente:" />
+						<p:autoComplete id="cliente" queryDelay="500" converter="clienteConverter" 
+							maxResults="10" minQueryLength="3" forceSelection="true"
+							value="#{atendimentoCtrl.cliente}" var="cliente" itemValue="#{cliente}"
+							itemLabel="#{cliente.nome}" completeMethod="#{atendimentoCtrl.autoCompleteCliente}">
+							
+							<f:facet name="itemtip">
+								<h:panelGrid columns="2">
+									<f:facet name="header">
+										<h:outputText value="Detalhes" />
+									</f:facet>
+
+									<h:outputText value="Cliente:" />
+									<h:outputText value="#{cliente.nome}" />
+									
+									<h:outputText value="CPF:" />
+									<h:outputText value="#{cliente.cpf}" />
+								</h:panelGrid>
+							</f:facet>
+						</p:autoComplete>
+					</h:panelGrid>
+				</p:panel>
+				
+				<p:panel header="Ações">
+					<p:commandButton value="Consultar" action="#{atendimentoCtrl.consultar}"
+						icon="ui-icon-search" update="resultados"/>
+					
+					<p:commandButton value="Limpar" action="#{atendimentoCtrl.limpar}" 
+						update="@all" process="@this" immediate="true"/>
+				</p:panel>
+				
+				<p:panel header="Resultados" id="resultados">
+					<p:dataTable var="item" value="#{atendimentoCtrl.atendimentos}" paginator="true"
+						rows="5" emptyMessage="Nenhum registro encontrado..." id="table">
+						
+						<p:column headerText="Cliente">
+							<h:outputText value="#{item.animal.dono.nome}" />
+						</p:column>
+						
+						<p:column headerText="Animal">
+							<h:outputText value="#{item.animal.nome}" />
+						</p:column>
+						
+						<p:column headerText="Data Entrada">
+							<h:outputText value="#{item.dataHoraEntrada}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Diagnóstico">
+							<h:outputText value="#{item.diagnostico}" />
+						</p:column>
+						
+						<p:column>
+							<p:commandButton icon="ui-icon-pencil" label="Editar" title="Editar" 
+									action="#{atendimentoCtrl.atualizar}">
+								<f:setPropertyActionListener target="#{atendimentoCtrl.atendimento}" value="#{item}" />
+							</p:commandButton>
+							<p:commandButton icon="ui-icon-trash" label="Excluir?" title="Excluir?" 
+									onclick="confirmarExclusao.show()">
+								<f:setPropertyActionListener target="#{atendimentoCtrl.atendimento}" value="#{item}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					
+					<p:confirmDialog showEffect="fade" widgetVar="confirmarExclusao" message="Deseja excluir o registro?" 
+							header="Confirmação">
+						<p:commandButton value="Sim" icon="ui-icon-check" action="#{atendimentoCtrl.excluir}" 
+								oncomplete="confirmarExclusao.hide()" update="resultados" />
+						<p:commandButton value="Não" icon="ui-icon-close" type="button" onclick="confirmarExclusao.hide()" />
+					</p:confirmDialog>
+				</p:panel>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>

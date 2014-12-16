@@ -59,9 +59,10 @@ public class AnimalCtrl extends Controlador {
 		}
 	}
 	
-	public List<Cliente> autoCompleteCliente(String search) {
+	public List<Cliente> autoCompleteCliente(String nome) {
 		try {
-			return servico.consultarClientes(search);
+			setServico();
+			return servico.consultarClientes(nome);
 		} catch (Exception e) {
 			addMensagemError("Erro ao tentar consultar cliente! Erro: " + e.getMessage());
 		}
@@ -70,6 +71,7 @@ public class AnimalCtrl extends Controlador {
 	
 	public void consultar() {
 		try {
+			setServico();
 			animals = new ArrayList<Animal>(servico.consultarPor(cliente));
 		} catch (Exception e) {
 			addMensagemError("Erro ao tentar consultar registros! Erro: " + e.getMessage());
@@ -107,6 +109,9 @@ public class AnimalCtrl extends Controlador {
 	}
 	
 	public void setServico() {
+		if (em == null || !em.isOpen()) {
+			em = JPAUtil.createEntityManager();
+		}
 		servico = new AnimalServico(em);
 	}
 	
